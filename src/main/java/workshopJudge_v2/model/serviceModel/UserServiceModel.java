@@ -1,32 +1,22 @@
-package workshopJudge_v2.model.entity;
+package workshopJudge_v2.model.serviceModel;
 
-import jakarta.persistence.*;
+import workshopJudge_v2.model.entity.Role;
 
+public class UserServiceModel {
 
-@Entity
-@Table(name = "users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true, nullable = false, updatable = false)
     private String username;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String git;
 
-    @ManyToOne
     private Role role;
 
-    public User() {
+    public UserServiceModel() {
     }
 
     public long getId() {
@@ -76,6 +66,4 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-
 }
