@@ -13,11 +13,13 @@ public class DatabaseInit implements CommandLineRunner {
     @Autowired
     public DatabaseInit(RoleService roleService) {
         this.roleService = roleService;
+
     }
 
 
     @Override
     public void run(String... args) throws Exception {
         this.roleService.saveRoles();
+
     }
 }
