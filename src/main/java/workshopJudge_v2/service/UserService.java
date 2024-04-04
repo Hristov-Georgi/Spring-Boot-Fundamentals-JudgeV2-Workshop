@@ -8,5 +8,9 @@ public interface UserService {
 
     void registerUser(UserServiceModel userServiceModel);
 
-    UserLoginBindingModel findByUsernameAndPassword(String username, String password);
+    UserServiceModel findByUsernameAndPassword(String username, String password);
+
+    void login(UserServiceModel userServiceModel);
+
+    void logout();
 }

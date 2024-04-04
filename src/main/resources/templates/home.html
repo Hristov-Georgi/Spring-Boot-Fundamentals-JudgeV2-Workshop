@@ -24,59 +24,8 @@
 <div class="" id="home">
     <div class="container">
         <div class="row">
-            <div class="col-12">
-                 <nav class="navbar navbar-expand-xl navbar-light bg-light rounded" >
-        <a class="navbar-brand" href="/">
-            <h1 class="tm-site-title mb-0">Judge v2</h1>
-        </a>
-        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item" >
-                    <a class="nav-link" href="#">
-                        <span>Hello {username}</span>
-                    </a>
-                </li>
-                
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                           role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            Admin
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Add Exercise</a>
-                            <a class="dropdown-item" href="#">Add Role</a>
-
-                        </div>
-                    </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Check Homework</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Add Homework</a>
-                </li>
-				<li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                </li>
-            
-            </ul>
-            <ul class="navbar-nav">
-
-                <li class="nav-item">
-                    <a class="nav-link d-flex" href="#">
-                        <span>Logout</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+            <div class="col-12" >
+                <nav th:include="fragments/nav"></nav>
             </div>
         </div>
         <!-- row -->
@@ -107,15 +56,15 @@
                             <h2 class="tm-block-title d-inline-block">Top Scored Students</h2>
                         </div>
                         <div class="col-4 text-right">
-                            <a  class="tm-link-black">View All</a>
+                            <a class="tm-link-black">View All</a>
                         </div>
                     </div>
                     <ol class="tm-list-group tm-list-group-alternate-color tm-list-group-pad-big">
-                        
-                            <li class="tm-list-group-item" >Top student one</li>
-							<li class="tm-list-group-item" >Top student two</li>
-							<li class="tm-list-group-item" >Top student three</li>
-                        
+
+                        <li class="tm-list-group-item">Top student one</li>
+                        <li class="tm-list-group-item">Top student two</li>
+                        <li class="tm-list-group-item">Top student three</li>
+
                     </ol>
                 </div>
             </div>
@@ -128,11 +77,11 @@
                 <div class="bg-white tm-block h-100">
                     <h2 class="tm-block-title">Active Exercises</h2>
                     <ol class="tm-list-group">
-                        
-                            <li class="tm-list-group-item">Active exercise one</li>
-							 <li class="tm-list-group-item">Active exercise two</li>
-							  <li class="tm-list-group-item">Active exercise three</li>
-                      
+
+                        <li class="tm-list-group-item">Active exercise one</li>
+                        <li class="tm-list-group-item">Active exercise two</li>
+                        <li class="tm-list-group-item">Active exercise three</li>
+
                     </ol>
                 </div>
             </div>
@@ -240,6 +189,7 @@
     }
 
     /*]]>*/
+
 </script>
 </body>
 </html>

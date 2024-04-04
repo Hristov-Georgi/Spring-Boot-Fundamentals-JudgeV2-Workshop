@@ -1,6 +1,5 @@
 package workshopJudge_v2.web;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +42,7 @@ public class UserController {
     @PostMapping("/login")
     public String loginConfirm(@Valid @ModelAttribute UserLoginBindingModel userLoginBindingModel,
                                BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes,
-                               HttpSession httpSession) {
+                               RedirectAttributes redirectAttributes) {
 
         if(bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
@@ -53,7 +51,7 @@ public class UserController {
             return "redirect:login";
         }
 
-        UserLoginBindingModel userModel = this.userService.findByUsernameAndPassword(
+        UserServiceModel userModel = this.userService.findByUsernameAndPassword(
                 userLoginBindingModel.getUsername(),
                 userLoginBindingModel.getPassword());
 
@@ -64,8 +62,7 @@ public class UserController {
             return "redirect:login";
         }
 
-        httpSession.setAttribute("userModel", userModel);
-
+        this.userService.login(userModel);
 
         return "redirect:/";
     }
@@ -101,6 +98,13 @@ public class UserController {
         this.userService.registerUser(userServiceModel);
 
         return "redirect:login";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        this.userService.logout();
+
+        return "redirect:/";
     }
 
 
