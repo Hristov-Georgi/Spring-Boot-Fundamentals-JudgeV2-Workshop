@@ -4,6 +4,8 @@ import workshopJudge_v2.model.binding.UserLoginBindingModel;
 import workshopJudge_v2.model.binding.UserRegisterBindingModel;
 import workshopJudge_v2.model.serviceModel.UserServiceModel;
 
+import java.util.List;
+
 public interface UserService {
 
     void registerUser(UserServiceModel userServiceModel);
@@ -13,4 +15,8 @@ public interface UserService {
     void login(UserServiceModel userServiceModel);
 
     void logout();
+
+    List<String> getAllUsernames();
+
+    void changeUserRole(String username, String role);
 }
