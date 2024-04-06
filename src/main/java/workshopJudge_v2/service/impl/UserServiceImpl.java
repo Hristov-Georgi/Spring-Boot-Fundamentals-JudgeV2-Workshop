@@ -3,6 +3,7 @@ package workshopJudge_v2.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import workshopJudge_v2.model.binding.RoleAddBindingModel;
 import workshopJudge_v2.model.entity.Role;
 import workshopJudge_v2.model.entity.User;
 import workshopJudge_v2.model.entity.enumeration.RoleType;
@@ -74,9 +75,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserRole(String username, String role) {
+    public void changeUserRole(RoleAddBindingModel roleAddBindingModel) {
+        String username = roleAddBindingModel.getUsername();
+        String roleName = roleAddBindingModel.getRole();
+
         User user = this.userRepository.findByUsername(username).get();
-        Role newRole = this.roleRepository.findByName(RoleType.valueOf(role.toUpperCase())).get();
+        Role newRole = this.roleRepository.findByName(RoleType.valueOf(roleName.toUpperCase())).get();
 
         if(user.getRole() != newRole) {
             user.setRole(newRole);

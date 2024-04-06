@@ -8,6 +8,8 @@ import workshopJudge_v2.model.serviceModel.ExerciseServiceModel;
 import workshopJudge_v2.repository.ExerciseRepository;
 import workshopJudge_v2.service.ExerciseService;
 
+import java.util.List;
+
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
 
@@ -25,5 +27,10 @@ public class ExerciseServiceImpl implements ExerciseService {
         Exercise exercise = this.modelMapper.map(exerciseServiceModel, Exercise.class);
 
         this.exerciseRepository.save(exercise);
+    }
+
+    @Override
+    public List<String> getExercisesNames() {
+        return this.exerciseRepository.findAllByName();
     }
 }

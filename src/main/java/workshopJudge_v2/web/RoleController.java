@@ -1,5 +1,6 @@
 package workshopJudge_v2.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ public class RoleController {
 
     private final UserService userService;
 
+    @Autowired
     public RoleController(UserService userService) {
         this.userService = userService;
     }
@@ -30,7 +32,7 @@ public class RoleController {
     @PostMapping("/add")
     public String addRoleConfirm(@ModelAttribute RoleAddBindingModel roleAddBindingModel) {
 
-        this.userService.changeUserRole(roleAddBindingModel.getUsername(), roleAddBindingModel.getRole());
+        this.userService.changeUserRole(roleAddBindingModel);
 
         return "redirect:/";
     }
