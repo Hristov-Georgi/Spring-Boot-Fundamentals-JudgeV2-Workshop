@@ -51,7 +51,7 @@ public class UserController {
             return "redirect:login";
         }
 
-        UserServiceModel userModel = this.userService.findByUsernameAndPassword(
+        UserServiceModel userModel = this.userService.validateUser(
                 userLoginBindingModel.getUsername(),
                 userLoginBindingModel.getPassword());
 
@@ -82,11 +82,7 @@ public class UserController {
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
 
-        boolean arePasswordsEqual = false;
-
-        if(userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
-            arePasswordsEqual = true;
-        }
+        boolean arePasswordsEqual = this.userService.comparePasswords(userRegisterBindingModel);
 
         if(bindingResult.hasErrors() || !arePasswordsEqual) {
             redirectAttributes.addFlashAttribute("userRegisterBindingModel", userRegisterBindingModel);

@@ -2,8 +2,10 @@ package workshopJudge_v2.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import workshopJudge_v2.model.binding.RoleAddBindingModel;
+import workshopJudge_v2.model.binding.UserRegisterBindingModel;
 import workshopJudge_v2.model.entity.Role;
 import workshopJudge_v2.model.entity.User;
 import workshopJudge_v2.model.entity.enumeration.RoleType;
@@ -25,19 +27,28 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final CurrentUser currentUser;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleService roleService, ModelMapper modelMapper,
-                           CurrentUser currentUser, RoleRepository roleRepository) {
+                           CurrentUser currentUser, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.modelMapper = modelMapper;
         this.currentUser = currentUser;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public boolean comparePasswords(UserRegisterBindingModel userRegisterBindingModel) {
+        return userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword());
     }
 
     @Override
     public void registerUser(UserServiceModel userServiceModel) {
+
+        userServiceModel.setPassword(this.passwordEncoder.encode(userServiceModel.getPassword()));
 
         User user = this.modelMapper.map(userServiceModel, User.class);
         user.setRole(this.roleService.getRoleNameUser());
@@ -47,11 +58,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceModel findByUsernameAndPassword(String username, String password) {
+    public UserServiceModel validateUser(String username, String password) {
 
-        return this.userRepository.findByUsernameAndPassword(username, password)
-                .map(u -> this.modelMapper.map(u, UserServiceModel.class))
-                .orElse(null);
+        Optional<User> compareUser = this.userRepository.findByUsername(username);
+
+        if(compareUser.isPresent() && this.passwordEncoder.matches(password, compareUser.get().getPassword())) {
+            return this.modelMapper.map(compareUser.get(), UserServiceModel.class);
+        }
+
+        return null;
     }
 
     @Override

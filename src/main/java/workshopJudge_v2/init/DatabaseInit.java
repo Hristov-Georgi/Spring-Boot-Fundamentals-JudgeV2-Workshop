@@ -10,6 +10,8 @@ public class DatabaseInit implements CommandLineRunner {
 
     private final RoleService roleService;
 
+
+
     @Autowired
     public DatabaseInit(RoleService roleService) {
         this.roleService = roleService;
@@ -20,6 +22,7 @@ public class DatabaseInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         this.roleService.saveRoles();
+
 
     }
 }
