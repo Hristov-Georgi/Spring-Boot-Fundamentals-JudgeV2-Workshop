@@ -1,11 +1,15 @@
 package workshopJudge_v2.model.serviceModel;
 
+import workshopJudge_v2.model.entity.Comment;
 import workshopJudge_v2.model.entity.Exercise;
 import workshopJudge_v2.model.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class HomeworkServiceModel {
+
+    private Long id;
 
     private LocalDateTime addedOn;
 
@@ -15,7 +19,17 @@ public class HomeworkServiceModel {
 
     private Exercise exercise;
 
+    private List<Comment> comments;
+
     public HomeworkServiceModel() {
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public LocalDateTime getAddedOn() {
@@ -48,5 +62,13 @@ public class HomeworkServiceModel {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

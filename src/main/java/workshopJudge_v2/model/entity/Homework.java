@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "homeworks")
@@ -24,6 +25,9 @@ public class Homework {
 
     @ManyToOne
     private Exercise exercise;
+
+    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER)
+    private List<Comment> comments;
 
     public Homework() {
         this.setAddedOn();

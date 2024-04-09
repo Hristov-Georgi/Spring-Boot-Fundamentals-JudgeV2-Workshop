@@ -11,11 +11,14 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-//    Optional<User> findByUsernameAndPassword(String username, String password);
 
     @Query("SELECT u.username FROM User u")
     List<String> findAllUsernames();
 
     Optional<User> findByUsername(String username);
+
+    @Query("SELECT u.username FROM User u" +
+            " ORDER BY SIZE(u.homeworks) DESC")
+    List<String> findTopStudents();
 
 }

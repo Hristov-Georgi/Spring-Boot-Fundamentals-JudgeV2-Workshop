@@ -8,6 +8,7 @@ import workshopJudge_v2.model.entity.Exercise;
 import workshopJudge_v2.model.entity.Homework;
 import workshopJudge_v2.model.entity.User;
 import workshopJudge_v2.model.serviceModel.HomeworkServiceModel;
+import workshopJudge_v2.model.view.HomeworkViewModel;
 import workshopJudge_v2.repository.ExerciseRepository;
 import workshopJudge_v2.repository.HomeworkRepository;
 import workshopJudge_v2.repository.UserRepository;
@@ -56,5 +57,21 @@ public class HomeworkServiceImpl implements HomeworkService {
         Exercise exercise = this.exerciseRepository.findByName(exerciseName).get();
 
         return exercise.getDueDate().isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public HomeworkServiceModel getHomeworkForCheck(String currentUsername) {
+
+        return this.modelMapper
+                .map(this.homeworkRepository.findTop1ByOrderByComments(currentUsername),
+                        HomeworkServiceModel.class);
+
+    }
+
+    @Override
+    public Homework findById(Long id) {
+
+        return this.homeworkRepository.findById(id).get();
+
     }
 }

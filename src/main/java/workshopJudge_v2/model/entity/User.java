@@ -2,6 +2,8 @@ package workshopJudge_v2.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -26,7 +28,18 @@ public class User {
     @ManyToOne
     private Role role;
 
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    private List<Homework> homeworks;
+
     public User() {
+    }
+
+    public List<Homework> getHomeworks() {
+        return homeworks;
+    }
+
+    public void setHomeworks(List<Homework> homeworks) {
+        this.homeworks = homeworks;
     }
 
     public long getId() {

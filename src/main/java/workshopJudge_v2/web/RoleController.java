@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import workshopJudge_v2.model.binding.RoleAddBindingModel;
+import workshopJudge_v2.security.CurrentUser;
 import workshopJudge_v2.service.UserService;
 
 @Controller
@@ -15,14 +16,20 @@ import workshopJudge_v2.service.UserService;
 public class RoleController {
 
     private final UserService userService;
+    private final CurrentUser currentUser;
 
     @Autowired
-    public RoleController(UserService userService) {
+    public RoleController(UserService userService, CurrentUser currentUser) {
         this.userService = userService;
+        this.currentUser = currentUser;
     }
 
     @GetMapping("/add")
     public String addRole(Model model) {
+
+        if(this.currentUser.isAnonymous() || !currentUser.isAdmin()) {
+            return "redirect:/";
+        }
 
         model.addAttribute("usernames", this.userService.getAllUsernames());
 

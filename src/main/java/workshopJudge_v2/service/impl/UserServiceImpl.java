@@ -10,6 +10,7 @@ import workshopJudge_v2.model.entity.Role;
 import workshopJudge_v2.model.entity.User;
 import workshopJudge_v2.model.entity.enumeration.RoleType;
 import workshopJudge_v2.model.serviceModel.UserServiceModel;
+import workshopJudge_v2.model.view.UserProfileViewModel;
 import workshopJudge_v2.repository.RoleRepository;
 import workshopJudge_v2.repository.UserRepository;
 import workshopJudge_v2.security.CurrentUser;
@@ -18,6 +19,7 @@ import workshopJudge_v2.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -103,5 +105,36 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserProfileViewModel findProfileData(Long id) {
 
+        User user = this.userRepository.findById(id).get();
+
+        UserProfileViewModel userProfile = this.modelMapper.map(
+                user, UserProfileViewModel.class);
+
+        userProfile.setHomeworks(user.getHomeworks().stream().map(h ->
+                h.getExercise().getName()).collect(Collectors.toList()));
+
+        return userProfile;
+    }
+
+    @Override
+    public User findByUsername(String username) {
+
+        return this.userRepository.findByUsername(username).get();
+
+    }
+
+    @Override
+    public Long findUsersCount() {
+        return this.userRepository.count();
+    }
+
+    @Override
+    public List<String> findTopStudents() {
+
+        return this.userRepository.findTopStudents();
+
+    }
 }
