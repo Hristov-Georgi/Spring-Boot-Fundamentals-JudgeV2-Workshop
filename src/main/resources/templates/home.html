@@ -25,7 +25,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <nav th:insert="fragments/nav"></nav>
+                <nav th:insert="~{fragments/nav}"></nav>
             </div>
         </div>
         <!-- row -->
@@ -82,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <th:block th:include="~{fragments/footer}"></th:block>
+        <th:block th:insert="~{fragments/footer}"></th:block>
     </div>
 </div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

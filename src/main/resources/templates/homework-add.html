@@ -19,7 +19,7 @@
 <div class="container">
     <div class="row rounded">
         <div class="col-12">
-            <nav th:include="fragments/nav"></nav>
+            <nav th:insert="~{fragments/nav}"></nav>
         </div>
     </div>
     <!-- row -->
@@ -72,7 +72,7 @@
                         </form>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-12 mx-auto mb-4">
-                        <img src="/img/homework.png" alt="Homework picture" width="100%">
+                        <img src="/images/homework.png" alt="Homework picture" width="100%">
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
         </div>
     </div>
 </div>
-<th:block th:include="~{fragments/footer}"></th:block>
+<th:block th:insert="~{fragments/footer}"></th:block>
 </div>
 
 

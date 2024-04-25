@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 import workshopJudge_v2.model.binding.HomeworkAddBindingModel;
 import workshopJudge_v2.model.entity.Exercise;
 import workshopJudge_v2.model.entity.Homework;
-import workshopJudge_v2.model.entity.User;
+import workshopJudge_v2.model.entity.UserEntity;
 import workshopJudge_v2.model.serviceModel.HomeworkServiceModel;
-import workshopJudge_v2.model.view.HomeworkViewModel;
 import workshopJudge_v2.repository.ExerciseRepository;
 import workshopJudge_v2.repository.HomeworkRepository;
-import workshopJudge_v2.repository.UserRepository;
-import workshopJudge_v2.security.CurrentUser;
+import workshopJudge_v2.repository.UserEntityRepository;
 import workshopJudge_v2.service.HomeworkService;
 
 import java.time.LocalDateTime;
@@ -20,16 +18,14 @@ import java.time.LocalDateTime;
 @Service
 public class HomeworkServiceImpl implements HomeworkService {
 
-    private final CurrentUser currentUser;
-    private final UserRepository userRepository;
+    private final UserEntityRepository userRepository;
     private final ExerciseRepository exerciseRepository;
     private final HomeworkRepository homeworkRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public HomeworkServiceImpl(CurrentUser currentUser, UserRepository userRepository,
+    public HomeworkServiceImpl(UserEntityRepository userRepository,
                                ExerciseRepository exerciseRepository, ModelMapper modelMapper, HomeworkRepository homeworkRepository) {
-        this.currentUser = currentUser;
         this.userRepository = userRepository;
         this.exerciseRepository = exerciseRepository;
         this.modelMapper = modelMapper;
@@ -37,9 +33,10 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public void addHomework(HomeworkAddBindingModel homeworkAddBindingModel) {
+    public void addHomework(HomeworkAddBindingModel homeworkAddBindingModel,
+                            String username) {
 
-        User currentUser = this.userRepository.findByUsername(this.currentUser.getUsername()).get();
+        UserEntity currentUser = this.userRepository.findByUsername(username).get();
         Exercise exercise = this.exerciseRepository.findByName(homeworkAddBindingModel.getExercise()).get();
 
         HomeworkServiceModel homeworkServiceModel = new HomeworkServiceModel();

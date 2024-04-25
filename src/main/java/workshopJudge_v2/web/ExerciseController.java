@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import workshopJudge_v2.model.binding.ExerciseAddBindingModel;
 import workshopJudge_v2.model.serviceModel.ExerciseServiceModel;
-import workshopJudge_v2.security.CurrentUser;
 import workshopJudge_v2.service.ExerciseService;
 
 @Controller
@@ -22,21 +21,16 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
     private final ModelMapper modelMapper;
-    private final CurrentUser currentUser;
 
 
     @Autowired
-    public ExerciseController(ExerciseService exerciseService, ModelMapper modelMapper, CurrentUser currentUser) {
+    public ExerciseController(ExerciseService exerciseService, ModelMapper modelMapper) {
         this.exerciseService = exerciseService;
         this.modelMapper = modelMapper;
-        this.currentUser = currentUser;
     }
 
     @GetMapping("/add")
     public String addExercise(Model model) {
-        if(this.currentUser.isAnonymous()) {
-            return "redirect:/";
-        }
 
         if(!model.containsAttribute("exerciseAddBindingModel")) {
             model.addAttribute("exerciseAddBindingModel", new ExerciseAddBindingModel());

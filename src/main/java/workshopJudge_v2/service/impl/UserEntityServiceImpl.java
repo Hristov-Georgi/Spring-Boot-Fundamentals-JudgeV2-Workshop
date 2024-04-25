@@ -1,5 +1,6 @@
 package workshopJudge_v2.service.impl;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,37 +8,34 @@ import org.springframework.stereotype.Service;
 import workshopJudge_v2.model.binding.RoleAddBindingModel;
 import workshopJudge_v2.model.binding.UserRegisterBindingModel;
 import workshopJudge_v2.model.entity.Role;
-import workshopJudge_v2.model.entity.User;
+import workshopJudge_v2.model.entity.UserEntity;
 import workshopJudge_v2.model.entity.enumeration.RoleType;
 import workshopJudge_v2.model.serviceModel.UserServiceModel;
 import workshopJudge_v2.model.view.UserProfileViewModel;
 import workshopJudge_v2.repository.RoleRepository;
-import workshopJudge_v2.repository.UserRepository;
-import workshopJudge_v2.security.CurrentUser;
+import workshopJudge_v2.repository.UserEntityRepository;
 import workshopJudge_v2.service.RoleService;
-import workshopJudge_v2.service.UserService;
+import workshopJudge_v2.service.UserEntityService;
 
+import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserEntityServiceImpl implements UserEntityService {
 
-    private final UserRepository userRepository;
+    private final UserEntityRepository userRepository;
     private final RoleService roleService;
     private final ModelMapper modelMapper;
-    private final CurrentUser currentUser;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, ModelMapper modelMapper,
-                           CurrentUser currentUser, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserEntityServiceImpl(UserEntityRepository userRepository, RoleService roleService, ModelMapper modelMapper,
+                                 RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.modelMapper = modelMapper;
-        this.currentUser = currentUser;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -48,41 +46,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(UserServiceModel userServiceModel) {
+    public void registerUser(UserRegisterBindingModel userRegisterBindingModel) {
 
-        userServiceModel.setPassword(this.passwordEncoder.encode(userServiceModel.getPassword()));
+        userRegisterBindingModel.setPassword(this.passwordEncoder.encode(userRegisterBindingModel.getPassword()));
 
-        User user = this.modelMapper.map(userServiceModel, User.class);
-        user.setRole(this.roleService.getRoleNameUser());
+        UserEntity userEntity = this.modelMapper.map(userRegisterBindingModel, UserEntity.class);
+        userEntity.setRole(this.roleService.getRoleNameUser());
 
-        this.userRepository.save(user);
+        this.userRepository.save(userEntity);
 
-    }
-
-    @Override
-    public UserServiceModel validateUser(String username, String password) {
-
-        Optional<User> compareUser = this.userRepository.findByUsername(username);
-
-        if(compareUser.isPresent() && this.passwordEncoder.matches(password, compareUser.get().getPassword())) {
-            return this.modelMapper.map(compareUser.get(), UserServiceModel.class);
-        }
-
-        return null;
-    }
-
-    @Override
-    public void login(UserServiceModel userServiceModel) {
-        this.currentUser.setId(userServiceModel.getId());
-        this.currentUser.setUsername(userServiceModel.getUsername());
-        this.currentUser.setRoleType(userServiceModel.getRole().getName());
-    }
-
-    @Override
-    public void logout() {
-        this.currentUser.setId(null);
-        this.currentUser.setUsername(null);
-        this.currentUser.setRoleType(null);
     }
 
     @Override
@@ -96,7 +68,7 @@ public class UserServiceImpl implements UserService {
         String username = roleAddBindingModel.getUsername();
         String roleName = roleAddBindingModel.getRole();
 
-        User user = this.userRepository.findByUsername(username).get();
+        UserEntity user = this.userRepository.findByUsername(username).get();
         Role newRole = this.roleRepository.findByName(RoleType.valueOf(roleName.toUpperCase())).get();
 
         if(user.getRole() != newRole) {
@@ -106,21 +78,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileViewModel findProfileData(Long id) {
+    public UserProfileViewModel findProfileData(String username) {
 
-        User user = this.userRepository.findById(id).get();
+        UserEntity userEntity = this.userRepository.findByUsername(username).get();
 
         UserProfileViewModel userProfile = this.modelMapper.map(
-                user, UserProfileViewModel.class);
+                userEntity, UserProfileViewModel.class);
 
-        userProfile.setHomeworks(user.getHomeworks().stream().map(h ->
+        userProfile.setHomeworks(userEntity.getHomeworks().stream().map(h ->
                 h.getExercise().getName()).collect(Collectors.toList()));
 
         return userProfile;
     }
 
     @Override
-    public User findByUsername(String username) {
+    public UserEntity findByUsername(String username) {
 
         return this.userRepository.findByUsername(username).get();
 

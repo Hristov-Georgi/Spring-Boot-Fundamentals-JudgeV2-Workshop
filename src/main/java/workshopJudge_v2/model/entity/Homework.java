@@ -2,7 +2,6 @@ package workshopJudge_v2.model.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class Homework {
     private String gitAddress;
 
     @ManyToOne
-    private User author;
+    private UserEntity author;
 
     @ManyToOne
     private Exercise exercise;
@@ -57,11 +56,11 @@ public class Homework {
         this.gitAddress = gitAddress;
     }
 
-    public User getAuthor() {
+    public UserEntity getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserEntity author) {
         this.author = author;
     }
 
@@ -71,5 +70,13 @@ public class Homework {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

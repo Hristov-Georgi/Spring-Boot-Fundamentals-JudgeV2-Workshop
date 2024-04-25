@@ -1,10 +1,13 @@
 package workshopJudge_v2.model.binding;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import workshopJudge_v2.validation.anotations.MatchPasswords;
 
+@MatchPasswords(originalField = "password", confirmField = "confirmPassword")
 public class UserRegisterBindingModel {
 
     @Length(min = 2, message = "username length must be minimum two characters!")
@@ -12,10 +15,10 @@ public class UserRegisterBindingModel {
     private String username;
 
     @Length(min = 3, message = "password length must be minimum three characters!")
-    @NotNull
+    @NotBlank
     private String password;
 
-    @NotNull
+    @NotBlank
     private String confirmPassword;
 
     @Email(message = "enter valid email address!")

@@ -19,7 +19,7 @@
 <div class="container">
     <div class="row rounded">
         <div class="col-12">
-            <nav th:include="fragments/nav"></nav>
+            <nav th:insert="~{fragments/nav}"></nav>
         </div>
     </div>
     <!-- row -->
@@ -35,10 +35,10 @@
                     <div class="col-xl-7 col-lg-7 col-md-12">
                         <form th:object="${userProfile}" action="" class="tm-edit-product-form">
                             <div class="input-group mb-3">
-                                <label for="name" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                                <label  for="username" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
                                     Username
                                 </label>
-                                <input th:field="*{username}" disabled id="name" name="name" type="text"
+                                <input th:field="*{username}" disabled id="username" name="username" type="text"
                                        class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7">
                             </div>
                             <div class="input-group mb-3">
@@ -65,14 +65,14 @@
                         </form>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-12 mx-auto mb-4">
-                        <img src="/img/user-picture.jpg" alt="Profile Image" class="img-fluid mx-auto d-block">
+                        <img src="/images/user-picture.jpg" alt="Profile Image" class="img-fluid mx-auto d-block">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <th:block th:include="~{fragments/footer}"></th:block>
+    <th:block th:insert="~{fragments/footer}"></th:block>
 </div>
 
 </body>

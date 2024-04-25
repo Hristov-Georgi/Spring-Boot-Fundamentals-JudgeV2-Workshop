@@ -7,10 +7,9 @@ import workshopJudge_v2.model.binding.CommentAddBindingModel;
 import workshopJudge_v2.model.entity.Comment;
 import workshopJudge_v2.model.serviceModel.CommentServiceModel;
 import workshopJudge_v2.repository.CommentRepository;
-import workshopJudge_v2.security.CurrentUser;
 import workshopJudge_v2.service.CommentService;
 import workshopJudge_v2.service.HomeworkService;
-import workshopJudge_v2.service.UserService;
+import workshopJudge_v2.service.UserEntityService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,31 +18,29 @@ import java.util.Map;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserService userService;
+    private final UserEntityService userEntityService;
     private final HomeworkService homeworkService;
-    private final CurrentUser currentUser;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService,
-                              HomeworkService homeworkService, CurrentUser currentUser,
+    public CommentServiceImpl(CommentRepository commentRepository, UserEntityService userService,
+                              HomeworkService homeworkService,
                               ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
-        this.userService = userService;
+        this.userEntityService = userService;
         this.homeworkService = homeworkService;
-        this.currentUser = currentUser;
         this.modelMapper = modelMapper;
     }
 
 
     @Override
-    public void add(CommentAddBindingModel commentAddBindingModel) {
+    public void add(CommentAddBindingModel commentAddBindingModel, String username) {
 
         CommentServiceModel commentServiceModel = this.modelMapper
                 .map(commentAddBindingModel, CommentServiceModel.class);
 
         Comment comment = this.modelMapper.map(commentServiceModel, Comment.class);
-        comment.setAuthor(this.userService.findByUsername(this.currentUser.getUsername()));
+        comment.setAuthor(this.userEntityService.findByUsername(username));
         comment.setHomework(this.homeworkService.findById(commentAddBindingModel.getHomeworkId()));
 
         this.commentRepository.save(comment);

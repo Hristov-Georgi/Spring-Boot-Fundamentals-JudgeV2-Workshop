@@ -7,68 +7,46 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import workshopJudge_v2.model.binding.UserLoginBindingModel;
 import workshopJudge_v2.model.binding.UserRegisterBindingModel;
-import workshopJudge_v2.model.serviceModel.UserServiceModel;
-import workshopJudge_v2.security.CurrentUser;
-import workshopJudge_v2.service.UserService;
+import workshopJudge_v2.service.UserEntityService;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserEntityService userEntityService;
     private final ModelMapper modelMapper;
-    private final CurrentUser currentUser;
+
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper, CurrentUser currentUser) {
-        this.userService = userService;
+    public UserController(UserEntityService userService, ModelMapper modelMapper) {
+        this.userEntityService = userService;
         this.modelMapper = modelMapper;
-        this.currentUser = currentUser;
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
-        if(!model.containsAttribute("userLoginBindingModel")) {
-            model.addAttribute("userLoginBindingModel", new UserLoginBindingModel());
-            model.addAttribute("notFound", false);
-        }
-
+    public String login() {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String loginConfirm(@Valid @ModelAttribute UserLoginBindingModel userLoginBindingModel,
-                               BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes) {
+    @PostMapping("/login-error")
+    public String loginError(@ModelAttribute("username")
+                                         String username,
+                                  RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLoginBindingModel", bindingResult);
+            redirectAttributes.addFlashAttribute("username", username);
+            redirectAttributes.addFlashAttribute("bad_credentials", true);
 
-            return "redirect:login";
-        }
-
-        UserServiceModel userModel = this.userService.validateUser(
-                userLoginBindingModel.getUsername(),
-                userLoginBindingModel.getPassword());
-
-        if (userModel == null) {
-            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
-            redirectAttributes.addFlashAttribute("notFound", true);
-
-            return "redirect:login";
-        }
-
-        this.userService.login(userModel);
-
-        return "redirect:/";
+        return "redirect:login";
     }
 
     @GetMapping("/register")
     public String register(Model model) {
+
         if(!model.containsAttribute("userRegisterBindingModel")) {
             model.addAttribute("userRegisterBindingModel", new UserRegisterBindingModel());
         }
@@ -77,40 +55,28 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerConfirm(@Valid @ModelAttribute
-                                  UserRegisterBindingModel userRegisterBindingModel,
+    public String registerConfirm(@Valid @ModelAttribute UserRegisterBindingModel userRegisterBindingModel,
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
 
-        boolean arePasswordsEqual = this.userService.comparePasswords(userRegisterBindingModel);
-
-        if(bindingResult.hasErrors() || !arePasswordsEqual) {
+        if(bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("userRegisterBindingModel", userRegisterBindingModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegisterBindingModel", bindingResult);
+            redirectAttributes
+                    .addFlashAttribute("org.springframework.validation.BindingResult.userRegisterBindingModel",
+                        bindingResult);
+
             return "redirect:register";
         }
 
-        UserServiceModel userServiceModel = this.modelMapper.map(userRegisterBindingModel, UserServiceModel.class);
-        this.userService.registerUser(userServiceModel);
+        this.userEntityService.registerUser(userRegisterBindingModel);
 
-        return "redirect:login";
+        return "login";
     }
 
-    @GetMapping("/logout")
-    public String logout() {
-        this.userService.logout();
+    @GetMapping("/profile")
+    public String profile(Model model, Principal principal) {
 
-        return "redirect:/";
-    }
-
-    @GetMapping("/profile/{id}")
-    public String profile(@PathVariable Long id, Model model) {
-
-        if(currentUser.isAnonymous()) {
-            return "redirect:/";
-        }
-
-        model.addAttribute("userProfile", this.userService.findProfileData(id));
+        model.addAttribute("userProfile", this.userEntityService.findProfileData(principal.getName()));
 
         return "profile";
     }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class User {
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     private List<Homework> homeworks;
 
-    public User() {
+    public UserEntity() {
     }
 
     public List<Homework> getHomeworks() {

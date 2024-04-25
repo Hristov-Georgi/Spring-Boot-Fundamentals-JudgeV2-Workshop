@@ -2,7 +2,7 @@ package workshopJudge_v2.model.serviceModel;
 
 import workshopJudge_v2.model.entity.Comment;
 import workshopJudge_v2.model.entity.Exercise;
-import workshopJudge_v2.model.entity.User;
+import workshopJudge_v2.model.entity.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +15,7 @@ public class HomeworkServiceModel {
 
     private String gitAddress;
 
-    private User author;
+    private UserEntity author;
 
     private Exercise exercise;
 
@@ -48,11 +48,11 @@ public class HomeworkServiceModel {
         this.gitAddress = gitAddress;
     }
 
-    public User getAuthor() {
+    public UserEntity getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserEntity author) {
         this.author = author;
     }
 
