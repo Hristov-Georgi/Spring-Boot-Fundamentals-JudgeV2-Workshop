@@ -22,7 +22,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-        return httpSecurity.authorizeHttpRequests(
+        return httpSecurity
+                .authorizeHttpRequests(
                 authorizeRequests -> authorizeRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/users/login", "/users/login-error" ).permitAll()
@@ -30,21 +31,17 @@ public class SecurityConfiguration {
                         .requestMatchers("/roles/**").hasRole(RoleType.ADMIN.name())
                         .requestMatchers("/exercises/**").hasRole(RoleType.ADMIN.name())
                         .anyRequest().authenticated()
-
-
                 ).formLogin(formLogin -> formLogin
                         .loginPage("/users/login")
                         .usernameParameter("username")  //UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY
                         .passwordParameter("password") //UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY
                         .defaultSuccessUrl("/home", true)
                         .failureForwardUrl("/users/login-error")
-
                 ).logout(logout -> logout
                         .logoutUrl("/users/logout")
                         .logoutSuccessUrl("/").permitAll()
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-
         ).build();
 
     }
