@@ -34,6 +34,6 @@ public class RoleController {
 
         this.userService.changeUserRole(roleAddBindingModel);
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 }

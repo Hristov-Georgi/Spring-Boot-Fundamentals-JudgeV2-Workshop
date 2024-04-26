@@ -12,8 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import workshopJudge_v2.model.binding.UserRegisterBindingModel;
 import workshopJudge_v2.service.UserEntityService;
 
-import java.security.Principal;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -73,10 +71,10 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/profile")
-    public String profile(Model model, Principal principal) {
+    @GetMapping("/profile/{name}")
+    public String profile(@PathVariable String name, Model model) {
 
-        model.addAttribute("userProfile", this.userEntityService.findProfileData(principal.getName()));
+        model.addAttribute("userProfile", this.userEntityService.findProfileData(name));
 
         return "profile";
     }

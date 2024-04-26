@@ -112,7 +112,7 @@ public class HomeworkController {
         this.commentService.add(commentAddBindingModel, userDetails.getUsername());
 
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
 

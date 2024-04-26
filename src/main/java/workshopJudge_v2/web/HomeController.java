@@ -1,11 +1,15 @@
 package workshopJudge_v2.web;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.thymeleaf.extras.springsecurity6.auth.Authorization;
 import workshopJudge_v2.service.CommentService;
 import workshopJudge_v2.service.ExerciseService;
 import workshopJudge_v2.service.UserEntityService;
+
+import java.security.Principal;
 
 @Controller
 public class HomeController {
@@ -39,7 +43,12 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index() {
+    public String index(Principal principal) {
+
+        if(principal != null) {
+            return "redirect:home";
+        }
+
         return "index";
     }
 
